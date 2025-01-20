@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tea Shop</title>
+    <script>
+        function addToCart(form) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            const formData = new FormData(form);
+            xhr.send(new URLSearchParams(formData).toString());
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert('Товар добавлен в корзину');
+                }
+            };
+
+            return false; // Не редиректим
+        }
+    </script>
+</head>
+<body>
+<h1>Доступные чаи</h1>
+<div th:each="product : ${products}" class="product-card">
+    <h2 th:text="${product.teaName}">Название</h2>
+    <p>id: <span th:text="${product.id}">id</span></p>
+<!--    <p>Категория: <span th:text="${product.category}">Категория</span></p>-->
+    <p>Категория: <span th:text="${product.category.category}">Категория</span>,
+        Ферментация: <span th:text="${product.category.fermentation}">Ферментация</span>
+    </p>
+    <p>Тип упаковки: <span th:text="${product.packaging.packaging}">Тип упаковки</span></p>
+    <p>Цена: <span th:text="${product.price}">Цена</span> $</p>
+
+    <form action="/add-to-cart" method="post" onsubmit="return addToCart(this);">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <label for="quantity">Количество:</label>
+        <input type="number" name="quantity" min="1" value="1"/>
+        <button type="submit">Добавить в корзину</button>
+    </form>
+</div>
+<a href="/cart">Перейти в корзину</a>
+</body>
+</html>

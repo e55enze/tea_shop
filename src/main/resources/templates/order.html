@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <script>
+        function createOrder() {
+            // Собираем данные из формы
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const email = document.getElementById("email").value;
+            const city = document.getElementById("city").value;
+            const address = document.getElementById("address").value;
+
+            // Получаем цену заказа из элемента с id=order-price
+            const orderPrice = document.getElementById("order-price").textContent.trim();
+
+            // Собираем данные корзины
+            const cartItems = [];
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const productId = item.querySelector('.product-id').textContent.trim();
+                const productName = item.querySelector('.product-name').textContent.trim();
+                const productQuantity = item.querySelector('.product-quantity').textContent.trim();
+                const productPrice = item.querySelector('.product-price').textContent.trim();
+
+                cartItems.push({
+                    productId: productId,
+                    productName: productName,
+                    productQuantity: productQuantity,
+                    productPrice: productPrice
+                });
+            });
+
+            // Отправляем данные на сервер
+            const orderData = {
+                name: name,
+                phone: phone,
+                email: email,
+                city: city,
+                address: address,
+                cartItems: cartItems,
+                price: orderPrice // используем значение из order-price
+            };
+
+            fetch('/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Заказ оформлен!');
+                        window.location.href = '/'; // Перенаправление на главную страницу после успешного оформления заказа
+                    } else {
+                        alert('Ошибка при оформлении заказа!');
+                    }
+                })
+                .catch(error => console.error('Ошибка:', error));
+        }
+    </script>
+</head>
+<body>
+<h1>Ваши товары в корзине</h1>
+
+<div th:each="cartItem : ${cartItems}" class="cart-item">
+    <h2>Товар ID: <span class="product-id" th:text="${cartItem.product.id}"></span></h2>
+    <p>Название товара: <span class="product-name" th:text="${cartItem.product.teaName}"></span></p>
+    <p>Количество: <span class="product-quantity" th:text="${cartItem.quantity}"></span></p>
+    <p>Цена товара: <span class="product-price" th:text="${cartItem.product.price}"></span> $</p>
+    <div></div>
+    <p>Цена заказа: <span class="order-price" th:text="${cart.orderPrice}"></span> $</p>
+</div>
+
+<div class="order-data">
+
+    <p>Цена заказа: <span class="" id="order-price" th:text="${cart.orderPrice}"></span> $</p>
+    <!-- Поля ввода для данных заказа -->
+    <label for="name">Имя:</label>
+    <input type="text" id="name" required /><br/>
+
+    <label for="phone">Номер телефона:</label>
+    <input type="text" id="phone" required /><br/>
+
+    <label for="email">Почта:</label>
+    <input type="email" id="email" required /><br/>
+
+    <label for="city">Город:</label>
+    <input type="text" id="city" required /><br/>
+
+    <label for="address">Адрес:</label>
+    <input type="text" id="address" required /><br/>
+
+    <button type="button" onclick="createOrder()">Оформить заказ</button>
+</div>
+<a href="/">Вернуться к чаю</a>
+</body>
+</html>
