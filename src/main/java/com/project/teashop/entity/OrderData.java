@@ -5,25 +5,24 @@ import java.util.List;
 
 public class OrderData {
 
+    private String name;
     private String phone;
     private String email;
     private String city;
     private String address;
     private List<OrderItem> cartItems;
-    private double price;
+    private float price;
 
     private String orderTime;
 
-
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
-    private String name;
 
     public String getName() {
         return name;

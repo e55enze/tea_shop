@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Корзина</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script>
         function createOrder() {
             // Собираем данные из формы
@@ -61,39 +62,64 @@
         }
     </script>
 </head>
-<body>
+<body style="justify-content: center;text-align: center;">
+<div style="font-family: 'Poppins', sans-serif; font-size: 30px; font-weight: bold;"> Корзина</div>
+
 <h1>Ваши товары в корзине</h1>
+<div style="justify-content: center;text-align: center; display: flex; justify-content: center">
+    <div th:each="cartItem : ${cartItems}" class="cart-item" style="margin: 15px;
+    border: 2px solid #fd7801;
+    border-radius: 5px;
+    padding: 7px;
+    width: 200px;">
+        <h2>Товар ID: <span class="product-id" th:text="${cartItem.product.id}"></span></h2>
+        <p style="font-size: 15px">Название: <span class="product-name" th:text="${cartItem.product.teaName}"></span></p>
+        <p style="font-size: 15px">Количество: <span class="product-quantity" th:text="${cartItem.quantity}"></span></p>
+        <p style="font-size: 15px">Цена товара: <span class="product-price" th:text="${cartItem.product.price}"></span> $</p>
 
-<div th:each="cartItem : ${cartItems}" class="cart-item">
-    <h2>Товар ID: <span class="product-id" th:text="${cartItem.product.id}"></span></h2>
-    <p>Название товара: <span class="product-name" th:text="${cartItem.product.teaName}"></span></p>
-    <p>Количество: <span class="product-quantity" th:text="${cartItem.quantity}"></span></p>
-    <p>Цена товара: <span class="product-price" th:text="${cartItem.product.price}"></span> $</p>
-    <div></div>
-    <p>Цена заказа: <span class="order-price" th:text="${cart.orderPrice}"></span> $</p>
+    <!--    <p>Цена заказа: <span class="order-price" th:text="${cart.orderPrice}"></span> $</p>-->
+    </div>
 </div>
+<div class="order-data" style="justify-content: center;font-size: 25px;">
 
-<div class="order-data">
-
-    <p>Цена заказа: <span class="" id="order-price" th:text="${cart.orderPrice}"></span> $</p>
     <!-- Поля ввода для данных заказа -->
-    <label for="name">Имя:</label>
-    <input type="text" id="name" required /><br/>
+    <div style="margin-top: 15px;">
+        <label for="name" style="height: 30px; font-size: 20px; ">Имя:</label>
+        <input type="text" id="name" required style="height: 30px;text-align: center;"/><br/>
+    </div>
+    <div style="margin-top: 15px;">
+        <label for="phone" style="height: 30px; font-size: 20px;">Телефон:</label>
+        <input type="text" id="phone" required style="height: 30px;text-align: center;"/><br/>
+    </div>
+    <div style="margin-top: 15px;">
+        <label for="email" style="height: 30px; font-size: 20px; text-align: center;">Почта:</label>
+        <input type="email" id="email" required style="height: 30px;"/><br/>
+    </div>
+    <div style="margin-top: 15px;">
+        <label for="city" style="height: 30px; font-size: 20px; ">Город:</label>
+        <input type="text" id="city" required style="height: 30px;text-align: center;"/><br/>
+    </div>
+    <div style="margin-top: 15px;">
+        <label for="address" style="height: 30px; font-size: 20px;">Адрес:</label>
+        <input type="text" id="address" required style="height: 30px;text-align: center;"/><br/>
+    </div>
+    <div style="margin-top: 15px;">
+        <p style="font-size: 25px">Цена заказа: <span class="" id="order-price" th:text="${cart.orderPrice}" ></span> $</p>
+    </div>
+    <button type="button" onclick="createOrder()"
+    style="
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+    padding: .8rem 0.5rem;
+    font-size: 2.2rem;
+    border-radius:.5rem;
+    border:.2rem solid var(--black);
+    color:var(--black);
+    cursor:pointer;
+    background: none;">Оформить заказ</button>
 
-    <label for="phone">Номер телефона:</label>
-    <input type="text" id="phone" required /><br/>
-
-    <label for="email">Почта:</label>
-    <input type="email" id="email" required /><br/>
-
-    <label for="city">Город:</label>
-    <input type="text" id="city" required /><br/>
-
-    <label for="address">Адрес:</label>
-    <input type="text" id="address" required /><br/>
-
-    <button type="button" onclick="createOrder()">Оформить заказ</button>
 </div>
-<a href="/">Вернуться к чаю</a>
+<a href="/" style="display: flex;justify-content: center;font-size: 20px;border-size: 1px;">Вернуться на главную</a>
 </body>
 </html>

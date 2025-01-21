@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Tea Shop</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
     <script>
         function addToCart(form) {
             const xhr = new XMLHttpRequest();
@@ -23,24 +24,51 @@
     </script>
 </head>
 <body>
-<h1>Доступные чаи</h1>
-<div th:each="product : ${products}" class="product-card">
-    <h2 th:text="${product.teaName}">Название</h2>
-    <p>id: <span th:text="${product.id}">id</span></p>
-<!--    <p>Категория: <span th:text="${product.category}">Категория</span></p>-->
-    <p>Категория: <span th:text="${product.category.category}">Категория</span>,
-        Ферментация: <span th:text="${product.category.fermentation}">Ферментация</span>
-    </p>
-    <p>Тип упаковки: <span th:text="${product.packaging.packaging}">Тип упаковки</span></p>
-    <p>Цена: <span th:text="${product.price}">Цена</span> $</p>
+<header class="header">
+    <div class="logo">Tea Shop <i class="fa fa-leaf"></i></div>
+    <div class="navbar">
+        <a href="/">Главная</a>
+        <a href="/cart">Корзина</a>
+        <a th:if="${session.username != null}" href="/profile">Профиль</a>
+        <a th:if="${session.username == null}" href="/auth">Авторизация / Регистрация</a>
+    </div>
+</header>
 
-    <form action="/add-to-cart" method="post" onsubmit="return addToCart(this);">
-        <input type="hidden" name="productId" th:value="${product.id}"/>
-        <label for="quantity">Количество:</label>
-        <input type="number" name="quantity" min="1" value="1"/>
-        <button type="submit">Добавить в корзину</button>
-    </form>
-</div>
-<a href="/cart">Перейти в корзину</a>
+<section class="products">
+    <h1 class="heading">Ассортимент <span>Чая</span></h1>
+    <div class="product-slider">
+        <div class="wrapper">
+            <div th:each="product : ${products}" class="box">
+                <h2 th:text="${product.teaName}">Название чая</h2>
+                <img th:src="@{/image/{filename}(filename=${product.image})}" alt="Изображение чая" style="height: 20rem; width: auto;" />
+                <div class="product-info">
+                    <div class="category" style="font-size: 15px">Категория: <span th:text="${product.category.category}">Категория</span></div>
+                    <div class="fermentation" style="font-size: 15px">Ферментация: <span th:text="${product.category.fermentation}">Ферментация</span></div>
+                    <div class="packaging" style="font-size: 15px">Тип упаковки: <span th:text="${product.packaging.packaging}">Тип упаковки</span></div>
+                    <div class="price" style="font-size: 15px">Цена: <span th:text="${product.price}">Цена</span> $</div>
+                </div>
+
+                <form action="/add-to-cart" method="post" onsubmit="return addToCart(this);" class="data-to-cart">
+                    <input type="hidden" name="productId" th:value="${product.id}"/>
+                    <div style="display: flex;justify-content: space-around;width: 220px;">
+                        <div style="margin: auto; font-size: medium; display: flex; align-items: center;justify-content: center;">
+                            <label for="quantity" class="quantity-label">Количество:</label>
+                        </div>
+
+                        <div style="width: 30px;">
+                            <input type="number" class="quantity-input" name="quantity" min="1" value="1"
+                            style="width: 60px; border-style: groove; height: 30px;"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="addToCartBtn">Добавить в корзину</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>&copy; 2023 Tea Shop. Все права защищены.</p>
+</footer>
 </body>
 </html>
